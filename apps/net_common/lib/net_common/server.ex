@@ -27,13 +27,13 @@ defmodule NetCommon.Server do
     if on_client_connect(connection) do
       :ok = :gen_tcp.controlling_process(client_socket, connection)
 
-      NetCommon.Connection.connect_to_client(connection)
+      NetCommon.Connection.connect(connection, :client)
 
       Logger.info("[#{NetCommon.Connection.id(connection)}] Connection Approved")
 
-      message = %NetCommon.Message{header: %NetCommon.Message.Header{id: 1}}
-      |> NetCommon.Message.put("Welcome")
-      NetCommon.Connection.send(connection, message)
+      # message = %NetCommon.Message{header: %NetCommon.Message.Header{id: 1}}
+      # |> NetCommon.Message.put("Welcome")
+      # NetCommon.Connection.send(connection, message)
 
       wait_for_client_connection(socket, connections ++ [connection])
     else

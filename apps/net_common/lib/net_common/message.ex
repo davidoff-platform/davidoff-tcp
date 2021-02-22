@@ -10,4 +10,14 @@ defmodule NetCommon.Message do
     message = message |> Map.put(:body, body)
     Map.put(message, :header, Map.put(message.header, :size, message |> NetCommon.Message.size))
   end
+
+  def create(id, body) do
+    %NetCommon.Message{header: %NetCommon.Message.Header{id: id}}
+    |> NetCommon.Message.put(body)
+  end
+
+
+  def types(:validation) do
+    1000
+  end
 end

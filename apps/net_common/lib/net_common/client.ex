@@ -19,7 +19,7 @@ defmodule NetCommon.Client do
           {NetCommon.Connection, socket}
         )
 
-    NetCommon.Connection.connect_to_server(connection)
+    NetCommon.Connection.connect(connection, :server)
 
     # {:ok, queue} = DynamicSupervisor.start_child(
     #   NetCommon.Supervisor,
@@ -32,11 +32,11 @@ defmodule NetCommon.Client do
   end
 
   def ping() do
-    connection = Agent.get(__MODULE__, &Map.get(&1, :connection))
+    # connection = Agent.get(__MODULE__, &Map.get(&1, :connection))
 
-    message = %NetCommon.Message{header: %NetCommon.Message.Header{id: 1}}
-    |> NetCommon.Message.put("ping")
+    # message = %NetCommon.Message{header: %NetCommon.Message.Header{id: 1}}
+    # |> NetCommon.Message.put("ping")
 
-    NetCommon.Connection.send(connection, message)
+    # NetCommon.Connection.send(connection, message)
   end
 end
