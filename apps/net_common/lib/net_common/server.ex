@@ -31,7 +31,9 @@ defmodule NetCommon.Server do
 
       Logger.info("[#{NetCommon.Connection.id(connection)}] Connection Approved")
 
-      NetCommon.Connection.send(connection, "Welcome")
+      message = %NetCommon.Message{header: %NetCommon.Message.Header{id: 1}}
+      |> NetCommon.Message.put("Welcome")
+      NetCommon.Connection.send(connection, message)
 
       wait_for_client_connection(socket, connections ++ [connection])
     else

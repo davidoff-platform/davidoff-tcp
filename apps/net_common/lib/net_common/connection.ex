@@ -32,19 +32,16 @@ defmodule NetCommon.Connection do
   end
 
   def read_header(connection) do
-    IO.inspect("Reading header")
-
-    case :gen_tcp.recv(connection |> socket, 0) do
+    case :gen_tcp.recv(connection |> socket, 83) do
       {:ok, data} -> read_body(connection, data)
       _ -> nil # close socket
     end
   end
 
-  def read_body(connection, header) do
-    IO.inspect("Header:")
-    IO.inspect(header)
+  def read_body(connection, data) do
+    header = data |> :erlang.binary_to_term()
 
-    case :gen_tcp.recv(connection |> socket, 0) do
+    case :gen_tcp.recv(connection |> socket, header.size) do
       {:ok, data} -> add_to_incoming_message_queue(connection, data)
       _ -> nil # close socket
     end
@@ -59,8 +56,9 @@ defmodule NetCommon.Connection do
     read_header(connection)
   end
 
-
   def send(connection, data) do
-    :ok = :gen_tcp.send(connection |> socket, data)
+    :ok = :gen_tcp.send(connection |> socket, data.header |> :erlang.term_to_binary())
+    :ok = :gen_tcp.send(connection |> socket, data |> :erlang.term_to_binary())
+    :ok
   end
 end

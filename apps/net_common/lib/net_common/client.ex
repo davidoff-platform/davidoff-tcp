@@ -34,6 +34,9 @@ defmodule NetCommon.Client do
   def ping() do
     connection = Agent.get(__MODULE__, &Map.get(&1, :connection))
 
-    NetCommon.Connection.send(connection, "ping")
+    message = %NetCommon.Message{header: %NetCommon.Message.Header{id: 1}}
+    |> NetCommon.Message.put("ping")
+
+    NetCommon.Connection.send(connection, message)
   end
 end
