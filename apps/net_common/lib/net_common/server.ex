@@ -6,7 +6,7 @@ defmodule NetCommon.Server do
   end
 
   def start_link([ port: port ]) do
-    {:ok, socket} = :gen_tcp.listen(port, [:binary, packet: :line, active: false, reuseaddr: true])
+    {:ok, socket} = :gen_tcp.listen(port, [:binary, packet: :raw, active: false, reuseaddr: true])
 
     Logger.info("[SERVER] Started at port #{port}")
 
@@ -30,6 +30,8 @@ defmodule NetCommon.Server do
       NetCommon.Connection.connect_to_client(connection)
 
       Logger.info("[#{NetCommon.Connection.id(connection)}] Connection Approved")
+
+      NetCommon.Connection.send(connection, "Welcome")
 
       wait_for_client_connection(socket, connections ++ [connection])
     else

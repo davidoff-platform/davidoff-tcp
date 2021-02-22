@@ -7,8 +7,6 @@ defmodule NetServer.Application do
 
   @impl true
   def start(_type, _args) do
-    :observer.start()
-
     children = [
       NetCommon.Supervisor,
       {NetCommon.Server, port: 5000},
